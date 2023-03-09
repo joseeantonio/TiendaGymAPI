@@ -28,10 +28,10 @@ public class ProductoVenta {
     @JoinColumn()
     private Producto producto;
 
-    private Number cantidad;
+    private Integer cantidad;
 
 
-    public ProductoVenta(Venta venta, Producto producto, Number cantidad) {
+    public ProductoVenta(Venta venta, Producto producto, Integer cantidad) {
         this.venta = venta;
         this.producto = producto;
         this.cantidad = cantidad;
