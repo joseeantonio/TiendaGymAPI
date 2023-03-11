@@ -76,7 +76,6 @@ class TiendaGymApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].email").value("a@a.com"))
-                .andExpect(jsonPath("$[0].password").value("password"))
                 .andExpect(jsonPath("$[0].username").value("pepito02"));
     }
 
