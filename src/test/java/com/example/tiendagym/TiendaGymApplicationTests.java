@@ -48,15 +48,13 @@ class TiendaGymApplicationTests {
                 .andExpect(status().isUnauthorized());
     }
 
-    private String token;
-    @BeforeAll
-    void getToken() throws Exception{
+    String getToken() throws Exception{
         MvcResult result=this.mockMvc.perform(post("/token").with(httpBasic("pepito02","password")))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String jwt = result.getResponse().getContentAsString();
-        this.token=jwt;
+        return jwt;
     }
 
     @Transactional
@@ -72,7 +70,7 @@ class TiendaGymApplicationTests {
     @Test
     void listTest() throws Exception {
 
-        mockMvc.perform(get("/clientes/").header("Authorization","Bearer "+token).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/clientes/").header("Authorization","Bearer "+getToken()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].email").value("a@a.com"))
@@ -85,7 +83,7 @@ class TiendaGymApplicationTests {
         long usersCount = clienteRepository.count();
         String testUser = "{\"email\": \"peri@peri.com\", \"password\": \"password\", \"username\": \"peri02\"}";
 
-        mockMvc.perform(post("/clientes/create/").header("Authorization","Bearer "+token).contentType(MediaType.APPLICATION_JSON).content(testUser))
+        mockMvc.perform(post("/clientes/create/").header("Authorization","Bearer "+getToken()).contentType(MediaType.APPLICATION_JSON).content(testUser))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].email").value("peri@peri.com"))
@@ -99,7 +97,7 @@ class TiendaGymApplicationTests {
     @Test
     void updateTest() throws Exception {
         String testUser = "{\"email\": \"peri@peri.com\", \"password\": \"password\", \"username\": \"peri02\"}";
-        mockMvc.perform(put("/clientes/1/").header("Authorization","Bearer "+token).contentType(MediaType.APPLICATION_JSON).content(testUser))
+        mockMvc.perform(put("/clientes/1/").header("Authorization","Bearer "+getToken()).contentType(MediaType.APPLICATION_JSON).content(testUser))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.email").value("peri@peri.com"));
